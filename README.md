@@ -237,79 +237,6 @@ Criado um arquivo bootstrap.php para contornar o No direct script access allowed
   }
   if (!defined('APPPATH')) {
       define('APPPATH', __DIR__ . '/application/');
-  }
-  require __DIR__ . '/vendor/autoload.php';
-
-
-3. Executar testes
-
-  php vendor/bin/phpunit --testdox
-
-
-4. Exemplo de saída
-
-  PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
-
-
-  * Cliente Entity
-  ✔ Deve criar cliente com dados validos
-  ✔ Deve editar cliente
-  ✔ Deve excluir cliente
-
-  Time: 00:00.015, Memory: 6.00 MB
-
-  OK (3 tests, 6 assertions)
-
-
-
----
-
-## 🏗️ Arquitetura e Princípios SOLID
-
-Este projeto implementa uma arquitetura limpa baseada em **DDD (Domain-Driven Design)** e **princípios SOLID**, garantindo código testável, manutenível e extensível.
-
-### **📐 Estrutura DDD-like**
-
-```
-application/
-├── domain/                     # Camada de domínio (regras de negócio)
-│   ├── entities/              # Entidades do domínio
-│   └── services/              # Serviços de domínio
-├── infrastructure/            # Camada de infraestrutura
-│   ├── repositories/          # Implementações de repositórios
-│   └── services/             # Serviços externos (APIs, etc.)
-├── usecases/                 # Casos de uso da aplicação
-└── controllers/              # Controladores (camada de apresentação)
-```
-
-### **🎯 Princípios SOLID Implementados**
-
-#### **S - Single Responsibility Principle**
-- **`ClienteModel`**: Responsável apenas pelo acesso ao banco de dados
-- **`CepService`**: Focado exclusivamente na consulta de CEP e cache
-- **`ClienteService`**: Gerencia regras de negócio de clientes
-- **`Chatbot`**: Controlador dedicado exclusivamente ao chatbot IA
-
-#### **O - Open/Closed Principle**
-- **Interfaces bem definidas**: `ClienteRepositoryInterface` permite extensão
-- **Novos repositórios**: MySQL, InMemory, API externa sem alterar código existente
-- **Serviços plugáveis**: Fácil adição de novos serviços de IA ou APIs
-
-#### **L - Liskov Substitution Principle**
-- **Substituição transparente**: `ClienteRepositoryMysql` ↔ `ClienteRepositoryInMemory`
-- **Interfaces consistentes**: Qualquer implementação funciona nos testes
-- **Polimorfismo**: Comportamento previsível em todas as implementações
-
-#### **I - Interface Segregation Principle**
-- **Interfaces específicas**: Métodos focados por responsabilidade
-- **Sem dependências desnecessárias**: Cada consumidor usa apenas o que precisa
-- **Contratos limpos**: Interfaces pequenas e coesas
-
-#### **D - Dependency Inversion Principle**
-- **Abstrações primeiro**: Controllers dependem de interfaces, não implementações
-- **Injeção de dependências**: Manual nos controllers, automática nos testes
-- **Baixo acoplamento**: Fácil troca de implementações
-
 ---
 
 ## 🧪 Testes (TDD)
@@ -347,6 +274,27 @@ PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
 
 * Cliente Entity
 ✔ Deve criar cliente com dados validos
+✔ Deve editar cliente
+✔ Deve excluir cliente
+
+Time: 00:00.015, Memory: 6.00 MB
+
+OK (3 tests, 6 assertions)
+```
+
+### **4. Exemplo de saída**
+```
+PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
+
+* Cliente Entity
+✔ Deve criar cliente com dados validos
+✔ Deve editar cliente
+✔ Deve excluir cliente
+
+Time: 00:00.015, Memory: 6.00 MB
+
+OK (3 tests, 6 assertions)
+```
 ✔ Deve editar cliente
 ✔ Deve excluir cliente
 
