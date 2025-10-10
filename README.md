@@ -262,48 +262,101 @@ Criado um arquivo bootstrap.php para contornar o No direct script access allowed
 
 
 
-## 🔎 Debug — problemas comuns
+---
 
+## 🏗️ Arquitetura e Princípios SOLID
 
-  "No direct script access allowed"
-  * Resolvido pelo bootstrap.php com as constantes BASEPATH e APPPATH.
+Este projeto implementa uma arquitetura limpa baseada em **DDD (Domain-Driven Design)** e **princípios SOLID**, garantindo código testável, manutenível e extensível.
 
+### **📐 Estrutura DDD-like**
 
-  Imagem não aparece
-  * Verifique se o arquivo existe em uploads/ e se base_url está correto.
+```
+application/
+├── domain/                     # Camada de domínio (regras de negócio)
+│   ├── entities/              # Entidades do domínio
+│   └── services/              # Serviços de domínio
+├── infrastructure/            # Camada de infraestrutura
+│   ├── repositories/          # Implementações de repositórios
+│   └── services/             # Serviços externos (APIs, etc.)
+├── usecases/                 # Casos de uso da aplicação
+└── controllers/              # Controladores (camada de apresentação)
+```
 
+### **🎯 Princípios SOLID Implementados**
 
-  Tabela enderecos não encontrada
-  * Corrigido: agora a tabela correta é endereco (singular).
+#### **S - Single Responsibility Principle**
+- **`ClienteModel`**: Responsável apenas pelo acesso ao banco de dados
+- **`CepService`**: Focado exclusivamente na consulta de CEP e cache
+- **`ClienteService`**: Gerencia regras de negócio de clientes
+- **`Chatbot`**: Controlador dedicado exclusivamente ao chatbot IA
 
+#### **O - Open/Closed Principle**
+- **Interfaces bem definidas**: `ClienteRepositoryInterface` permite extensão
+- **Novos repositórios**: MySQL, InMemory, API externa sem alterar código existente
+- **Serviços plugáveis**: Fácil adição de novos serviços de IA ou APIs
 
-  Sessão indefinida ($this->session)
-  * IGaranta que a lib session está no autoload.
+#### **L - Liskov Substitution Principle**
+- **Substituição transparente**: `ClienteRepositoryMysql` ↔ `ClienteRepositoryInMemory`
+- **Interfaces consistentes**: Qualquer implementação funciona nos testes
+- **Polimorfismo**: Comportamento previsível em todas as implementações
 
+#### **I - Interface Segregation Principle**
+- **Interfaces específicas**: Métodos focados por responsabilidade
+- **Sem dependências desnecessárias**: Cada consumidor usa apenas o que precisa
+- **Contratos limpos**: Interfaces pequenas e coesas
 
+#### **D - Dependency Inversion Principle**
+- **Abstrações primeiro**: Controllers dependem de interfaces, não implementações
+- **Injeção de dependências**: Manual nos controllers, automática nos testes
+- **Baixo acoplamento**: Fácil troca de implementações
 
-## 🔧 Regras SOLID aplicadas (resumo prático)
+### **🧪 Test-Driven Development (TDD)**
 
+- **Cobertura completa**: Entidades, serviços e casos de uso testados
+- **Testes unitários**: PHPUnit com mocks e stubs
+- **Ciclo Red-Green-Refactor**: Desenvolvimento orientado por testes
+- **Qualidade garantida**: Código testável por design
 
-S (Single Responsibility)
+---
 
-Cada classe/arquivo tem uma responsabilidade única: ClienteModel (acesso ao DB), CepService (consulta de CEP e cache), ClienteService (regras de atualização e coordenação).
+## 🔧 Troubleshooting
 
-* O (Open/Closed)
+### **Problemas Comuns e Soluções**
 
-Serviços e repositórios estruturados por interface (ex.: ClienteRepositoryInterface) permitem adicionar novos repositórios (MySQL / InMemory) sem alterar consumidores.
+#### **"No direct script access allowed"**
+- **Causa**: CodeIgniter bloqueando acesso direto em testes
+- **Solução**: Arquivo `bootstrap.php` com constantes `BASEPATH` e `APPPATH`
 
-* L (Liskov Substitution)
+#### **Imagem não aparece**
+- **Verificar**: Arquivo existe em `uploads/` 
+- **Configurar**: `base_url` correto no CodeIgniter
 
-Implementações de repositórios seguem a interface; podemos trocar ClienteRepositoryMysql por ClienteRepositoryInMemory nos testes sem quebrar o código.
+#### **Tabela não encontrada**
+- **Atenção**: Usar `endereco` (singular), não `enderecos`
+- **Migration**: Verificar estrutura do banco de dados
 
-* I (Interface Segregation)
+#### **Sessão indefinida**
+- **Configurar**: Library `session` no autoload do CodeIgniter
+- **Verificar**: Configurações de sessão no `config.php`
 
-Interfaces pequenas e focadas (apenas métodos necessários por consumidor).
+#### **API Gemini quota exceeded**
+- **Monitorar**: Uso da cota gratuita diária
+- **Fallback**: Sistema automático de respostas básicas
+- **Otimizar**: Tokens e parâmetros de configuração
 
-* D (Dependency Inversion)
+### **🚀 Deploy Issues**
 
-Controllers e services dependem de abstrações (interfaces) e recebem implementações via injeção (manual nos controllers ou via helper de autoload).
+#### **SSH não conecta**
+- **Verificar**: Chaves SSH configuradas no cPanel
+- **Testar**: Conexão com `ssh -v` para debug
+- **Alternativa**: Upload manual via File Manager
+
+#### **Database connection failed**
+- **Hostgator**: Verificar host `br908.hostgator.com.br`
+- **Credenciais**: User/password corretos no `database.php`
+- **Teste**: Script de diagnóstico `diagnostico.php`
+
+---
 
 
 ## 🧠 Observações
