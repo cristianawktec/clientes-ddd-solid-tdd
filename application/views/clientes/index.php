@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>Lista de Clientes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container mt-5">
@@ -108,6 +109,9 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Widget do Chatbot -->
+  <?php $this->load->view('chatbot/widget-simple'); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

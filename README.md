@@ -1,20 +1,33 @@
-# Sistema de Cadastro de Clientes - PHP MVC (CodeIgniter 3)
+# Sistema de Cadastro de Clientes - PHP MVC (CodeIgniter 3) + Chatbot IA
 
-Este projeto é uma versao atualizada e melhorada do sistema simples de gerenciamento de clientes com endereço vinculado, implementado em **CodeIgniter 3**. A estrutura adotada mistura o padrão MVC tradicional do CI com uma organização *DDD-like* (camadas `domain` / `infrastructure` / `usecases`) para isolar regras de negócio e tornar o código testável e mais manutenível e com Test-Driven Development (TDD) com PHPUnit e melhorias para seguir princípios SOLID.
+Este projeto é uma versão atualizada e melhorada do sistema de gerenciamento de clientes com endereço vinculado, implementado em **CodeIgniter 3**. Agora inclui um **chatbot inteligente com Google Gemini AI** para assistência aos usuários. A estrutura adota o padrão MVC tradicional do CI com uma organização *DDD-like* (camadas `domain` / `infrastructure` / `usecases`) para isolar regras de negócio e tornar o código testável e mais manutenível, seguindo princípios SOLID com Test-Driven Development (TDD).
 
 ---
 
 ## ✅ Funcionalidades
 
+### 📋 **Sistema de Clientes**
 * Listagem de clientes (com miniatura da imagem)
 * Cadastro de clientes com upload de foto
 * Edição de cliente (dados + endereço)
 * Exclusão de cliente (propaga remoção do endereço)
 * Validações de formulário (nome, email, telefone)
 * Integração com API de CEP (ViaCEP) via serviço
+
+### 🤖 **Chatbot Inteligente (NOVO)**
+* **Assistente virtual** especializado no sistema de clientes
+* **Integração com Google Gemini AI** para respostas inteligentes
+* **Sistema híbrido**: IA + respostas básicas (fallback)
+* **Interface moderna** com design responsivo
+* **Widget flutuante** no canto da tela
+* **Sessões persistentes** para continuidade da conversa
+* **API REST** para comunicação em tempo real
+
+### 🏗️ **Arquitetura**
 * Estrutura preparada para DDD: `domain`, `infrastructure`, `usecases`
 * Testes unitários (PHPUnit) cobrindo criação, edição e exclusão de cliente
 * Injeção de dependências nos serviços/repos (facilita testes e mantém SOLID)
+* Deploy automatizado via SSH para servidor Hostgator
 ---
 
 ## ⚙️ Requisitos
@@ -23,7 +36,9 @@ Este projeto é uma versao atualizada e melhorada do sistema simples de gerencia
 * MySQL / MariaDB
 * XAMPP / MAMP / WAMP / LAMP (ou servidor equivalente)
 * Composer (necessário para PHPUnit)
+* **Google Gemini API Key** (para chatbot IA)
 * Pastas do projeto dentro do `htdocs`/`www` do servidor
+* **SSH configurado** (para deploy em produção)
 
 ---
 
@@ -39,7 +54,8 @@ clientes/
 ├── application/
 │   ├── config/
 │   ├── controllers/
-│   │   └── Cliente.php
+│   │   ├── Cliente.php
+│   │   └── Chatbot.php                     # NOVO - Controlador do chatbot IA
 │   ├── domain/
 │   │   ├── entities/
 │   │   │   └── ClienteEntity.php
@@ -62,8 +78,12 @@ clientes/
 │   ├── usecases/
 │   │   └── CadastrarCliente.php
 │   └── views/
+│       ├── chatbot/                        # NOVO - Views do chatbot
+│       │   ├── widget-simple.php           # Widget responsivo do chatbot
+│       │   ├── widget.php                  # Widget alternativo
+│       │   └── test.php                    # Teste da API
 │       └── clientes/
-│           ├── index.php
+│           ├── index.php                   # ATUALIZADO - com widget integrado
 │           ├── create.php
 │           └── edit.php
 ├── tests/                                  # testes PHPUnit
@@ -111,6 +131,91 @@ CREATE TABLE `endereco` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ```
+
+---
+
+## 🤖 Chatbot com Google Gemini AI
+
+### **📋 Funcionalidades do Chatbot**
+
+O sistema inclui um chatbot inteligente integrado que oferece assistência aos usuários sobre o sistema de clientes.
+
+### **⚙️ Configuração da API**
+
+1. **Obter API Key do Google Gemini:**
+   - Acesse: https://ai.google.dev/
+   - Gere uma API Key gratuita
+   - Configure no controlador `application/controllers/Chatbot.php`
+
+2. **Configuração no código:**
+```php
+// Em application/controllers/Chatbot.php
+private $gemini_api_key = 'SUA_API_KEY_AQUI';
+```
+
+### **🎯 Características Técnicas**
+
+- **Modelo utilizado:** `gemini-2.5-flash` (otimizado para eficiência)
+- **Sistema híbrido:** IA principal + fallback inteligente
+- **Controle de sessão:** Mantém contexto da conversa
+- **API REST:** Endpoints JSON para comunicação
+- **Interface responsiva:** Widget moderno com Bootstrap 5
+
+### **🔧 Endpoints da API**
+
+```bash
+# Iniciar sessão do chatbot
+POST /chatbot/start
+
+# Enviar mensagem
+POST /chatbot/message
+{
+  "message": "Como cadastrar um cliente?"
+}
+
+# Verificar status
+GET /chatbot/test
+
+# Finalizar sessão
+POST /chatbot/end
+```
+
+### **💡 Respostas Inteligentes**
+
+O chatbot está configurado para responder sobre:
+- Cadastro e edição de clientes
+- Upload de fotos e documentos
+- Consulta de endereços via CEP
+- Funcionalidades do sistema
+- Navegação e uso da interface
+
+### **🛡️ Sistema de Fallback**
+
+Quando a API do Google Gemini não está disponível, o sistema automaticamente utiliza respostas básicas pré-configuradas, garantindo que o chatbot sempre funcione.
+
+---
+
+## 🚀 Deploy e Produção
+
+### **SSH Deploy (Hostgator)**
+
+O projeto está configurado para deploy automático via SSH:
+
+```bash
+# Conectar via SSH
+ssh -i ~/.ssh/hostgator_key usuario@servidor.hostgator.com.br
+
+# Upload de arquivos via SCP
+scp -i ~/.ssh/hostgator_key arquivo.php usuario@servidor:~/destino/
+```
+
+### **Arquivos de Deploy**
+
+- `DEPLOY-HOSTGATOR-INSTRUCOES.md` - Instruções completas de deploy
+- `UPLOAD-MANUAL-HOSTGATOR.md` - Upload manual via cPanel
+- `diagnostico.php` - Verificação do ambiente do servidor
+
+---
 ## 🧪 Testes (TDD)
 
 * Este projeto utiliza PHPUnit para testes automatizados.
@@ -203,19 +308,56 @@ Controllers e services dependem de abstrações (interfaces) e recebem implement
 
 ## 🧠 Observações
 
-  * Projeto em CodeIgniter 3, atualizado para suportar práticas modernas de SOLID e DDD + TDD.
+* Projeto em CodeIgniter 3, atualizado para suportar práticas modernas de SOLID e DDD + TDD.
+* **Chatbot inteligente** com Google Gemini AI integrado.
+* **Deploy automatizado** via SSH para servidores de produção.
+* Arquitetura mais limpa e testável.
+* **Sistema híbrido** que garante funcionamento mesmo com falhas na API externa.
+* Ideal para avaliação de desenvolvedor backend full stack.
 
-  * Arquitetura mais limpa e testável.
+---
 
-  * Ideal para avaliação de desenvolvedor backend full stack.
+## 🎯 Demonstração
 
+**🌐 Sistema em Produção:** https://wk.consultoriawk.com/clientes/
+
+**📸 Principais Funcionalidades:**
+
+### **💼 Gerenciamento de Clientes**
+- ✅ Listagem com filtros avançados
+- ✅ Cadastro com upload de fotos
+- ✅ Edição e exclusão segura
+- ✅ Integração automática com ViaCEP
+
+### **🤖 Chatbot Inteligente**
+- ✅ Widget flutuante responsivo
+- ✅ Respostas contextuais sobre o sistema
+- ✅ Integração com Google Gemini AI
+- ✅ Sistema de fallback inteligente
+
+### **🚀 Deploy Profissional**
+- ✅ SSH configurado para produção
+- ✅ Scripts de deploy automatizado
+- ✅ Ambiente Hostgator otimizado
+- ✅ Monitoramento e diagnóstico
+
+---
 
 ## ✍️ Autor
 
-  Desenvolvido por Cristian Marques — https://wk.consultoriawk.com/
+Desenvolvido por **Cristian Marques** — https://wk.consultoriawk.com/
 
-  Projeto adaptado para DDD-like com separação clara entre domain, infrastructure e testes unitários.
+Projeto adaptado para DDD-like com separação clara entre domain, infrastructure, testes unitários e **chatbot inteligente com Google Gemini AI**.
 
-  ![alt text](uploads/image.png)
+### **🚀 Tecnologias Utilizadas**
+
+- **Backend:** PHP 8.0+, CodeIgniter 3, MySQL
+- **Frontend:** Bootstrap 5, Font Awesome, jQuery
+- **IA:** Google Gemini API 2.5-flash
+- **Testes:** PHPUnit com TDD
+- **Deploy:** SSH, SCP, Hostgator
+- **Arquitetura:** DDD-like, SOLID, MVC
+
+![Sistema de Clientes com Chatbot](uploads/image.png)
 
 
