@@ -365,19 +365,19 @@ Controllers e services dependem de abstrações (interfaces) e recebem implement
 ## 📸 Screenshots do Sistema
 
 ### 💼 Lista de Clientes
-![Lista de Clientes](assets/screenshots/lista-clientes.png)
+![Lista de Clientes](uploads/lista-clientes.png)
 *Interface principal com listagem, filtros e chatbot integrado*
 
 ### 📝 Cadastro de Cliente
-![Novo Cliente](assets/screenshots/novo-cliente.png)
+![Novo Cliente](uploads/novo-cliente.png)
 *Formulário de cadastro com upload de imagem e integração ViaCEP*
 
 ### ✏️ Edição de Cliente
-![Editar Cliente](assets/screenshots/editar-cliente.png)
+![Editar Cliente](uploads/editar-cliente.png)
 *Edição completa de dados pessoais e endereço*
 
 ### 🤖 Chatbot IA em Ação
-![Chatbot Funcionando](assets/screenshots/chatbot-funcionando.png)
+![Chatbot Funcionando](uploads/chatbot-funcionando.png)
 *Assistente virtual com Google Gemini AI respondendo sobre o sistema*
 
 ### Funcionalidades Demonstradas:
@@ -403,5 +403,3 @@ Projeto adaptado para DDD-like com separação clara entre domain, infrastructur
 - **Testes:** PHPUnit com TDD
 - **Deploy:** SSH, SCP, Hostgator
 - **Arquitetura:** DDD-like, SOLID, MVC
-
-![Sistema de Clientes com Chatbot](uploads/image.png)
