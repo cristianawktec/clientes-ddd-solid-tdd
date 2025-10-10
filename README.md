@@ -365,19 +365,19 @@ Controllers e services dependem de abstrações (interfaces) e recebem implement
 ## 📸 Screenshots do Sistema
 
 ### 💼 Lista de Clientes
-![Lista de Clientes](./uploads/lista-clientes.png)
+![Lista de Clientes](./uploads/lista-clientes.png?v=2)
 *Interface principal com listagem, filtros e chatbot integrado*
 
 ### 📝 Cadastro de Cliente
-![Novo Cliente](./uploads/novo-cliente.png)
+![Novo Cliente](./uploads/novo-cliente.png?v=2)
 *Formulário de cadastro com upload de imagem e integração ViaCEP*
 
 ### ✏️ Edição de Cliente
-![Editar Cliente](./uploads/editar-cliente.png)
+![Editar Cliente](./uploads/editar-cliente.png?v=2)
 *Edição completa de dados pessoais e endereço*
 
 ### 🤖 Chatbot IA em Ação
-![Chatbot Funcionando](./uploads/chatbot-funcionando.png)
+![Chatbot Funcionando](./uploads/chatbot-funcionando.png?v=2)
 *Assistente virtual com Google Gemini AI respondendo sobre o sistema*
 
 ### Funcionalidades Demonstradas:
