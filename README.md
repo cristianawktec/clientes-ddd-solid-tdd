@@ -310,51 +310,104 @@ application/
 - **Injeção de dependências**: Manual nos controllers, automática nos testes
 - **Baixo acoplamento**: Fácil troca de implementações
 
-### **🧪 Test-Driven Development (TDD)**
+---
 
-- **Cobertura completa**: Entidades, serviços e casos de uso testados
-- **Testes unitários**: PHPUnit com mocks e stubs
-- **Ciclo Red-Green-Refactor**: Desenvolvimento orientado por testes
-- **Qualidade garantida**: Código testável por design
+## 🧪 Testes (TDD)
+
+Este projeto utiliza PHPUnit para testes automatizados.
+
+### **1. Instalação**
+```bash
+composer install
+```
+
+### **2. Arquivo bootstrap.php**
+
+Criado um arquivo `bootstrap.php` para contornar o "No direct script access allowed" do CodeIgniter nos testes:
+
+```php
+<?php
+if (!defined('BASEPATH')) {
+    define('BASEPATH', __DIR__);
+}
+if (!defined('APPPATH')) {
+    define('APPPATH', __DIR__ . '/application/');
+}
+require __DIR__ . '/vendor/autoload.php';
+```
+
+### **3. Executar testes**
+```bash
+php vendor/bin/phpunit --testdox
+```
+
+### **4. Exemplo de saída**
+```
+PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
+
+* Cliente Entity
+✔ Deve criar cliente com dados validos
+✔ Deve editar cliente
+✔ Deve excluir cliente
+
+Time: 00:00.015, Memory: 6.00 MB
+
+OK (3 tests, 6 assertions)
+```
 
 ---
 
-## 🔧 Troubleshooting
+## � Debug — Problemas Comuns
 
-### **Problemas Comuns e Soluções**
+### **"No direct script access allowed"**
+* **Causa:** CodeIgniter bloqueando acesso direto
+* **Solução:** Resolvido pelo `bootstrap.php` com as constantes `BASEPATH` e `APPPATH`
 
-#### **"No direct script access allowed"**
-- **Causa**: CodeIgniter bloqueando acesso direto em testes
-- **Solução**: Arquivo `bootstrap.php` com constantes `BASEPATH` e `APPPATH`
+### **Imagem não aparece**
+* **Verificação:** Se o arquivo existe em `uploads/`
+* **Configuração:** Se `base_url` está correto no CodeIgniter
 
-#### **Imagem não aparece**
-- **Verificar**: Arquivo existe em `uploads/` 
-- **Configurar**: `base_url` correto no CodeIgniter
+### **Tabela enderecos não encontrada**
+* **Correção:** Agora a tabela correta é `endereco` (singular)
+* **Atenção:** Verificar estrutura do banco de dados
 
-#### **Tabela não encontrada**
-- **Atenção**: Usar `endereco` (singular), não `enderecos`
-- **Migration**: Verificar estrutura do banco de dados
+### **Sessão indefinida ($this->session)**
+* **Solução:** Garantir que a lib `session` está no autoload
+* **Verificação:** Configurações de sessão no `config.php`
 
-#### **Sessão indefinida**
-- **Configurar**: Library `session` no autoload do CodeIgniter
-- **Verificar**: Configurações de sessão no `config.php`
+---
 
-#### **API Gemini quota exceeded**
-- **Monitorar**: Uso da cota gratuita diária
-- **Fallback**: Sistema automático de respostas básicas
-- **Otimizar**: Tokens e parâmetros de configuração
+## 🔧 Regras SOLID Aplicadas (Resumo Prático)
 
-### **🚀 Deploy Issues**
+### **S (Single Responsibility)**
+Cada classe/arquivo tem uma responsabilidade única:
+- **`ClienteModel`**: Acesso ao banco de dados
+- **`CepService`**: Consulta de CEP e cache
+- **`ClienteService`**: Regras de atualização e coordenação
+- **`Chatbot`**: Controlador exclusivo do chatbot IA
 
-#### **SSH não conecta**
-- **Verificar**: Chaves SSH configuradas no cPanel
-- **Testar**: Conexão com `ssh -v` para debug
-- **Alternativa**: Upload manual via File Manager
+### **O (Open/Closed)**
+Serviços e repositórios estruturados por interface (ex.: `ClienteRepositoryInterface`) permitem adicionar novos repositórios (MySQL / InMemory) sem alterar consumidores.
 
-#### **Database connection failed**
-- **Hostgator**: Verificar host `br908.hostgator.com.br`
-- **Credenciais**: User/password corretos no `database.php`
-- **Teste**: Script de diagnóstico `diagnostico.php`
+### **L (Liskov Substitution)**
+Implementações de repositórios seguem a interface; podemos trocar `ClienteRepositoryMysql` por `ClienteRepositoryInMemory` nos testes sem quebrar o código.
+
+### **I (Interface Segregation)**
+Interfaces pequenas e focadas (apenas métodos necessários por consumidor).
+
+### **D (Dependency Inversion)**
+Controllers e services dependem de abstrações (interfaces) e recebem implementações via injeção (manual nos controllers ou via helper de autoload).
+
+---
+
+## 🧠 Observações
+
+* **Projeto em CodeIgniter 3**, atualizado para suportar práticas modernas de SOLID e DDD + TDD
+* **Chatbot inteligente** com Google Gemini AI integrado
+* **Deploy automatizado** via SSH para servidores de produção
+* **Arquitetura mais limpa e testável**
+* **Sistema híbrido** que garante funcionamento mesmo com falhas na API externa
+* **Ideal para avaliação** de desenvolvedor backend full stack
 
 ---
 
@@ -393,6 +446,35 @@ application/
 - ✅ Scripts de deploy automatizado
 - ✅ Ambiente Hostgator otimizado
 - ✅ Monitoramento e diagnóstico
+
+---
+
+## 📸 Screenshots do Sistema
+
+### **💼 Lista de Clientes**
+![Lista de Clientes](assets/screenshots/lista-clientes.png)
+*Interface principal com listagem, filtros e chatbot integrado*
+
+### **📝 Cadastro de Cliente**
+![Novo Cliente](assets/screenshots/novo-cliente.png)
+*Formulário de cadastro com upload de imagem e integração ViaCEP*
+
+### **✏️ Edição de Cliente**
+![Editar Cliente](assets/screenshots/editar-cliente.png)
+*Edição completa de dados pessoais e endereço*
+
+### **🤖 Chatbot IA em Ação**
+![Chatbot Funcionando](assets/screenshots/chatbot-funcionando.png)
+*Assistente virtual com Google Gemini AI respondendo sobre o sistema*
+
+### **Funcionalidades Demonstradas:**
+- ✅ **Interface moderna** com Bootstrap 5 e Font Awesome
+- ✅ **CRUD completo** de clientes com validações
+- ✅ **Upload de imagens** para perfil dos clientes
+- ✅ **Integração ViaCEP** para busca automática de endereços
+- ✅ **Chatbot inteligente** com respostas contextuais
+- ✅ **Filtros dinâmicos** por nome, email, telefone e UF
+- ✅ **Design responsivo** para desktop e mobile
 
 ---
 
